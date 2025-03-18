@@ -29,6 +29,15 @@ export default {
       files: []
     };
   },
+  computed: {
+    songId() {
+      return this.$route.params.id;
+    }
+  },
+  mounted() {
+    // TODO(cbwilkes): Fetch song data here
+    console.log('Song ID:', this.songId);
+  },
   methods: {
     addTracks(files) {
       if (!files.length) {
