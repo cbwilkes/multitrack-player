@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div v-if="song">
+      <h2>Song Details</h2>
+      <p>Name: {{ song.name }}</p>
+    </div>
     <VFileInput
       label="Tracks"
       @change="addTracks"
@@ -19,6 +23,7 @@
 
 <script>
 import Track from './Track';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -31,12 +36,33 @@ export default {
   },
   computed: {
     songId() {
-      return this.$route.params.id;
-    }
+      const route = this.$route;
+      if (route && route.params && route.params.id) {
+        return route.params.id;
+      }
+      return undefined;
+    },
+    ...mapState(['song'])
   },
   mounted() {
-    // TODO(cbwilkes): Fetch song data here
-    console.log('Song ID:', this.songId);
+    if (this.songId) {
+      this.getSong(this.songId);
+
+      console.log(this.songId);
+
+      const f = async () => {
+        for (let track of this.song.tracks) {
+          const trackAudio = await fetch(`${track.uri}`);
+          const trackArrayBuffer = await trackAudio.arrayBuffer();
+          this.$store.dispatch('addTrack', {
+            name: track.name,
+            arrayBuffer: trackArrayBuffer
+          });
+        }
+      };
+
+      f();
+    }
   },
   methods: {
     addTracks(files) {
@@ -56,6 +82,28 @@ export default {
         });
       });
       this.files = [];
+    },
+    ...mapActions(['getSong', 'clearTracks'])
+  },
+  beforeUnmount() {
+    // Clear tracks when component is unmounted (page refresh/navigation)
+    this.clearTracks();
+  },
+  watch: {
+    songId(newVal) {
+      // Watch for changes in songId
+      if (newVal) {
+        this.isLoading = true; // Set loading to true before fetching
+        this.getSong(newVal)
+          .then(() => {
+            this.isLoading = false; // Reset loading after successful fetch
+          })
+          .catch(() => {
+            this.isLoading = false; // Reset loading on error as well
+          });
+      } else {
+        this.song = null; // Clear the song if no ID is present
+      }
     }
   }
 };

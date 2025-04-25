@@ -14,6 +14,7 @@ import {
   setTrackGain,
   playTracks
 } from '../tracks';
+import SongService from '../services/SongService';
 
 Vue.use(Vuex);
 
@@ -38,7 +39,8 @@ const store = new Vuex.Store({
       unit: 4
     },
     controlEditMode: null,
-    controlEditSelected: null
+    controlEditSelected: null,
+    song: null
   },
   getters: {
     getTrack(state) {
@@ -51,6 +53,9 @@ const store = new Vuex.Store({
   mutations: {
     setPlayState(state, value) {
       state.playState = value;
+    },
+    clearTracks(state) {
+      state.tracks = [];
     },
     /**
      * @param {Track} track
@@ -91,6 +96,9 @@ const store = new Vuex.Store({
     },
     setControlEditSelected(state, value) {
       state.controlEditSelected = value;
+    },
+    setSong(state, song) {
+      state.song = song;
     }
   },
   actions: {
@@ -172,6 +180,16 @@ const store = new Vuex.Store({
     },
     setPlayPosition({ commit }, value) {
       commit('setPlayPosition', value);
+    },
+    clearTracks({ commit }) {
+      commit('clearTracks');
+    },
+    getSong({ commit }, id) {
+      const songService = new SongService();
+      return songService.getSongById(id).then(response => {
+        const song = response;
+        commit('setSong', song);
+      });
     }
   }
 });

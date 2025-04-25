@@ -1,28 +1,54 @@
-// TODO(cbwilkes): Replace with api data
-const songs = [
-  {
-    id: 'a7b8c9d0-e1f2-4356-7890-1234567890ab',
-    name: 'Dummy song 1'
-  },
-  {
-    id: 'c3d4e5f6-a7b8-9012-3456-7890abcdef01',
-    name: 'Dummy song 2'
-  },
-  {
-    id: 'd5e6f7a8-b9c0-1234-5678-90abcdef1234',
-    name: 'Dummy song 3'
-  }
-];
-
 class SongService {
+  constructor() {
+    this.cachedSongs = null;
+    this.cacheExpiration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+  }
+
+  async loadSongsFromApi() {
+    try {
+      const response = await fetch('/songs.json', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const songsData = await response.json();
+      this.cachedSongs = {
+        data: songsData.songs,
+        timestamp: Date.now()
+      };
+    } catch (error) {
+      console.error('Failed to fetch songs:', error);
+      throw new Error('Failed to initialize song data');
+    }
+  }
+
+  retainCaching() {
+    if (
+      !this.cachedSongs ||
+      Date.now() > this.cachedSongs.timestamp + this.cacheExpiration
+    ) {
+      return this.loadSongsFromApi();
+    }
+    return Promise.resolve(this.cachedSongs.data);
+  }
+
   async getSongs() {
-    // TODO(cbwilkes): fetch from api
-    return songs;
+    if (!this.cachedSongs) {
+      await this.loadSongsFromApi();
+    }
+    return [...this.cachedSongs.data]; // Return shallow copy to prevent external modification
   }
 
   async getSongById(id) {
-    // TODO(cbwilkes): fetch from api
-    return songs.find(song => song.id === id);
+    if (!this.cachedSongs) {
+      await this.loadSongsFromApi();
+    }
+    return this.cachedSongs.data.find(song => song.id === id);
   }
 }
 
