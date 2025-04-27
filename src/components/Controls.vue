@@ -23,7 +23,7 @@
       <VIcon>{{ mdiStop }}</VIcon>
     </VBtn>
 
-    <VBtn
+    <!-- <VBtn
       icon
       :outlined="$store.state.clickActive"
       @click="mapControlOrDispatchAction('clickActive', 'toggleClickActive')"
@@ -31,7 +31,7 @@
       :color="getControlMappingColor('clickActive')"
     >
       <VIcon>{{ mdiMetronome }}</VIcon>
-    </VBtn>
+    </VBtn> -->
 
     <TextField v-model="clickBpm" class="small-input" />
     <TextField v-model="clickTimeSignature" class="small-input" />

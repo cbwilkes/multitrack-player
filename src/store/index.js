@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import {
-  clickEventLoop,
   setClickEventLoopCount,
   getClickBeats,
   getClickInterval
@@ -204,7 +203,7 @@ setInterval(() => {
       trackEventLoopCount++;
     }
 
-    clickEventLoop(store);
+    //clickEventLoop(store);
   }
 }, 1);
 
@@ -213,6 +212,18 @@ function trackEventLoop() {
     'setPlayPosition',
     store.state.playPosition + trackEventLoopInterval
   );
+
+  // Check if all tracks are complete
+  const allTracksComplete = store.state.tracks.every(
+    track => store.state.playPosition >= track.audioBuffer.duration
+  );
+
+  if (allTracksComplete) {
+    // Stop playback when all tracks are complete
+    store.dispatch('stop');
+    return;
+  }
+
   store.state.tracks.forEach(track =>
     track.eventLoop(store.state.playPosition)
   );

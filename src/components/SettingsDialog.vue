@@ -24,13 +24,13 @@
             step="0.01"
           />
 
-          <VSlider
+          <!-- <VSlider
             label="Click volume"
             v-model="clickGain"
             min="0"
             max="2"
             step="0.01"
-          />
+          /> -->
 
           <VSelect
             :items="midiDevices"
