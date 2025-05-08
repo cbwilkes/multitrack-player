@@ -33,27 +33,12 @@
       <VIcon>{{ mdiRepeat }}</VIcon>
     </VBtn>
 
-    <!-- <VBtn
-      icon
-      :outlined="$store.state.clickActive"
-      @click="mapControlOrDispatchAction('clickActive', 'toggleClickActive')"
-      :title="getControlMappingName('clickActive')"
-      :color="getControlMappingColor('clickActive')"
-    >
-      <VIcon>{{ mdiMetronome }}</VIcon>
-    </VBtn> -->
-
-    <TextField v-model="clickBpm" class="small-input" />
-    <TextField v-model="clickTimeSignature" class="small-input" />
-
     <Clock
       :values="timeValues"
       @input="setTime"
       :icon="mdiClockOutline"
       class="mr-4"
     />
-
-    <Clock :values="beatsValues" :icon="mdiMusicNote" @input="setBeats" />
 
     <VBtn text icon @click="$store.dispatch('toggleSettingsDialog')">
       <VIcon>{{ mdiWrench }}</VIcon>
@@ -66,7 +51,6 @@
 
 <script>
 import Clock from './Clock';
-import TextField from './TextField';
 import {
   mdiMetronome,
   mdiStop,
@@ -81,8 +65,7 @@ import { getClickInterval } from '../click';
 
 export default {
   components: {
-    Clock,
-    TextField
+    Clock
   },
   data() {
     return {
