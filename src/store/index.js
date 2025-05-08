@@ -39,7 +39,8 @@ const store = new Vuex.Store({
     },
     controlEditMode: null,
     controlEditSelected: null,
-    song: null
+    song: null,
+    loop: false
   },
   getters: {
     getTrack(state) {
@@ -98,6 +99,9 @@ const store = new Vuex.Store({
     },
     setSong(state, song) {
       state.song = song;
+    },
+    setLoop(state, value) {
+      state.loop = value;
     }
   },
   actions: {
@@ -180,6 +184,9 @@ const store = new Vuex.Store({
     setPlayPosition({ commit }, value) {
       commit('setPlayPosition', value);
     },
+    toggleLoop({ commit, state }) {
+      commit('setLoop', !state.loop);
+    },
     clearTracks({ commit }) {
       commit('clearTracks');
     },
@@ -219,8 +226,13 @@ function trackEventLoop() {
   );
 
   if (allTracksComplete) {
-    // Stop playback when all tracks are complete
-    store.dispatch('stop');
+    if (store.state.loop) {
+      // Reset playback position to start when looping
+      store.dispatch('playAt', 0);
+    } else {
+      // Stop playback when all tracks are complete and not looping
+      store.dispatch('stop');
+    }
     return;
   }
 

@@ -23,6 +23,16 @@
       <VIcon>{{ mdiStop }}</VIcon>
     </VBtn>
 
+    <VBtn
+      icon
+      @click="mapControlOrDispatchAction('loop', 'toggleLoop')"
+      :title="getControlMappingName('loop')"
+      :color="getControlMappingColor('loop')"
+      :class="{ 'v-btn--active': $store.state.loop }"
+    >
+      <VIcon>{{ mdiRepeat }}</VIcon>
+    </VBtn>
+
     <!-- <VBtn
       icon
       :outlined="$store.state.clickActive"
@@ -63,7 +73,8 @@ import {
   mdiWrench,
   mdiInformation,
   mdiMusicNote,
-  mdiClockOutline
+  mdiClockOutline,
+  mdiRepeat
 } from '@mdi/js';
 
 import { getClickInterval } from '../click';
@@ -80,7 +91,8 @@ export default {
       mdiWrench,
       mdiInformation,
       mdiMusicNote,
-      mdiClockOutline
+      mdiClockOutline,
+      mdiRepeat
     };
   },
   computed: {
