@@ -173,6 +173,8 @@ export default {
         // Watch for changes in songId
         if (newVal) {
           this.isLoading = true; // Set loading to true before fetching
+          // Clear existing tracks before loading new ones
+          this.clearTracks();
           this.getSong(newVal)
             .then(() => {
               this.isLoading = false; // Reset loading after successful fetch
