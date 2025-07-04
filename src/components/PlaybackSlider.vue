@@ -1,5 +1,5 @@
 <template>
-  <div class="playback-slider">
+  <div class="playback-slider d-flex flex-column justify-center">
     <div class="d-flex align-center">
       <VSlider
         v-model="sliderPosition"
@@ -10,7 +10,7 @@
         class="mx-2"
         @start="onSliderStart"
         @end="onSliderEnd"
-        :disabled="!duration"
+        :disabled="!$store.state.tracks.length"
       >
         <template v-slot:prepend>
           <div class="text-caption">{{ formatTime(sliderPosition) }}</div>
@@ -66,10 +66,11 @@ export default {
   },
   computed: {
     duration() {
-      if (!this.$store.state.tracks.length) return 0;
-      return Math.max(
-        ...this.$store.state.tracks.map(track => track.audioBuffer.duration)
-      );
+      if (!this.$store.state.tracks.length) return 1; // Return a small positive value instead of 0 to prevent disabling
+      const durations = this.$store.state.tracks
+        .map(track => track.audioBuffer?.duration || 0)
+        .filter(duration => duration > 0);
+      return durations.length ? Math.max(...durations) : 1; // Default to 1 if no valid durations found
     },
     sliderPosition: {
       get() {
@@ -78,6 +79,10 @@ export default {
       set(value) {
         if (this.isDragging) {
           this.$store.commit('setPlayPosition', value);
+          // If we're playing, jump to the new position
+          if (this.$store.state.playState === 'playing') {
+            this.$store.dispatch('playAt', value);
+          }
         }
       }
     }
@@ -112,8 +117,9 @@ export default {
     },
     onSliderStart() {
       this.isDragging = true;
+      // If we're playing, pause first
       if (this.$store.state.playState === 'playing') {
-        this.$store.dispatch('playPause');
+        this.$store.dispatch('stop');
       }
     },
     onSliderEnd() {
@@ -136,5 +142,7 @@ export default {
 .playback-slider {
   width: 100%;
   max-width: 800px;
+  height: 100%;
+  flex: 1;
 }
 </style>
