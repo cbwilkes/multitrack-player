@@ -7,9 +7,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
     "build": "vue-cli-service build",
-    "start": "vue-cli-service serve"
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve"
   },
   "dependencies": {
     "@mdi/js": "^5.2.45",

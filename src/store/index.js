@@ -40,7 +40,12 @@ const store = new Vuex.Store({
     controlEditMode: null,
     controlEditSelected: null,
     song: null,
-    loop: false
+    loop: false,
+    loopRegion: {
+      active: false,
+      start: 0,
+      end: 0
+    }
   },
   getters: {
     getTrack(state) {
@@ -102,6 +107,9 @@ const store = new Vuex.Store({
     },
     setLoop(state, value) {
       state.loop = value;
+    },
+    setLoopRegion(state, { active, start, end }) {
+      state.loopRegion = { active, start, end };
     }
   },
   actions: {
@@ -187,6 +195,9 @@ const store = new Vuex.Store({
     toggleLoop({ commit, state }) {
       commit('setLoop', !state.loop);
     },
+    setLoopRegion({ commit }, { active, start, end }) {
+      commit('setLoopRegion', { active, start, end });
+    },
     clearTracks({ commit }) {
       commit('clearTracks');
     },
@@ -219,6 +230,15 @@ function trackEventLoop() {
     'setPlayPosition',
     store.state.playPosition + trackEventLoopInterval
   );
+
+  // Check for region loop
+  if (
+    store.state.loopRegion.active &&
+    store.state.playPosition >= store.state.loopRegion.end
+  ) {
+    store.dispatch('playAt', store.state.loopRegion.start);
+    return;
+  }
 
   // Check if all tracks are complete
   const allTracksComplete = store.state.tracks.every(

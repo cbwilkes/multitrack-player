@@ -3,6 +3,20 @@
     <div v-if="song">
       <h2>Song Details</h2>
       <p>Name: {{ song.name }}</p>
+      <!-- <div v-if="song.lyrics" class="lyrics-section mt-4">
+        <h3>Lyrics</h3>
+        <VContainer fluid>
+          <VRow>
+            <VCol cols="12">
+              <VCard>
+                <VCardText>
+                  <vue-markdown :source="song.lyrics" class="lyrics-content"></vue-markdown>
+                </VCardText>
+              </VCard>
+            </VCol>
+          </VRow>
+        </VContainer>
+      </div> -->
     </div>
     <VFileInput
       label="Tracks"
@@ -83,10 +97,12 @@
 <script>
 import Track from './Track';
 import { mapState, mapActions } from 'vuex';
+// import VueMarkdown from 'vue-markdown-render';
 
 export default {
   components: {
     Track
+    // VueMarkdown,
   },
   data() {
     return {

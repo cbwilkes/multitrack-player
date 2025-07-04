@@ -1,5 +1,6 @@
 <template>
-  <VRow justify="end" align="center">
+  <VRow justify="space-between" align="center">
+    <PlaybackSlider class="flex-grow-1 mr-4" />
     <VBtn
       v-if="controlEditMode"
       small
@@ -51,6 +52,7 @@
 
 <script>
 import Clock from './Clock';
+import PlaybackSlider from './PlaybackSlider';
 import {
   mdiMetronome,
   mdiStop,
@@ -65,7 +67,8 @@ import { getClickInterval } from '../click';
 
 export default {
   components: {
-    Clock
+    Clock,
+    PlaybackSlider
   },
   data() {
     return {
