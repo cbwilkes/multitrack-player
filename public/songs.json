@@ -1,0 +1,36 @@
+{
+  "songs": [
+    {
+      "id": "a7b8c9d0-e1f2-4356-7890-1234567890ab",
+      "name": "Dummy song 1",
+      "lyrics": "# Dummy Song Lyrics\n\nVerse 1:\nThis is a sample verse\n\nChorus:\nThis is the chorus\n\n[Verse 2](cci:1://file:///c:/Users/cbwil/project/multitrack-player/src/components/TrackManager.vue:111:4-128:5):\nAnother sample verse",
+      "tracks": [
+        {
+          "id": "",
+          "name": "Upper",
+          "uri": "/audio/a7b8c9d0-e1f2-4356-7890-1234567890ab/upper.wav"
+        },
+        {
+          "id": "",
+          "name": "Middle",
+          "uri": "/audio/a7b8c9d0-e1f2-4356-7890-1234567890ab/middle.wav"
+        },
+        {
+          "id": "",
+          "name": "Lower",
+          "uri": "/audio/a7b8c9d0-e1f2-4356-7890-1234567890ab/lower.wav"
+        }
+      ]
+    },
+    {
+      "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef01",
+      "name": "Dummy song 2",
+      "tracks": []
+    },
+    {
+      "id": "d5e6f7a8-b9c0-1234-5678-90abcdef1234",
+      "name": "Dummy song 3",
+      "tracks": []
+    }
+  ]
+}
